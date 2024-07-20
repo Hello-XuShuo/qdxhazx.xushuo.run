@@ -6,6 +6,14 @@
   </head>
   
   <body>
-    <img src="./animation.gif" />
+    <img id="gif" src="./animation.gif" />
+    <script>
+      document.getElementById('gif').onload = function() {
+        this.setAttribute('loop', '1');
+        this.addEventListener('ended', function() {
+          this.removeAttrbute('loop');
+        });
+      }
+    </script>
   </body>
 </html>
