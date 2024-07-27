@@ -74,36 +74,7 @@
 
                         <div class="tab-pane fade show active">
                             <div class="row g-4" id="cards">
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="card">
-                                        <div class="card-header border-0 pb-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-story me-2">
-                                                        <a href="#"><img class="avatar-img rounded-circle" src="avatars/avatar2.png" alt=""></a>
-                                                    </div>
-                                                    <div>
-                                                        <div class="nav nav-divider">
-                                                            <h6 class="nav-item card-title mb-0"><a href="#"> 示例用户2 </a></h6>
-                                                        </div>
-                                                        <span class="card-title small text-body">2024-07-27</span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <a href="javascript:alert('不公开邮箱')" class="text-secondary btn btn-secondary-soft-hover py-1 px-2">
-                                                        <i class="fa-solid fa-reply"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <p><a href="#"> #西海岸中学# </a> <a href="#"> #西中# </a> <br> 示例文段</p>
-                                            <div class="d-grid mt-3">
-                                                <a class="btn btn-sm btn-primary-soft" href="#">查看</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
 
@@ -136,30 +107,35 @@
             tags = {
                 0: '#青岛西海岸中学#',
                 1: '#西中#'
-            }
+            };
 
             cards_data = [
                 card_data('示例用户', null, '2024', '01', '01', [0, 1], '示例文本', '#'),
-                card_data('示例用户', null, '2024', '12', '31', [0, 1], '示例文本', '#')
+                card_data('示例用户', null, '2024', '12', '31', [0], '示例文本', '#')
             ]
 
-            get_tag = function(item, index) {
-                return tags[item]
-            }
+            window.onload = function () {
+                document.getElementById('notify_text').innerText = notify.text;
+                document.getElementById('notify_date').innerText = notify.date;
+                document.getElementById('notify_href').setAttribute('href', notify.href);
 
-            handler = function(item, index) {
-                var date = item.year + '-' + item.month + '-' + item
+                cards_data.forEach(
+                    (item) => {
+                        let avatar = `avatars/avatar${Math.floor(Math.random()*6+1)}.png`;
 
-                if(item.email === null) {
-                    var email = "javascript: alert('不公开邮箱')"
-                } else {
-                    var email = "mailto: " + item.email
-                }
+                        let date = item.year + '-' + item.month + '-' + item.day;
 
-                tags = item.tags.forEach(get_tag())
+                        let tags_string = '';
 
-                var avatar = `avatars/avatar${Math.floor(Math.random()*6+1)}.png`
-                document.getElementById('cards').insertAdjacentHTML('beforeend', `<div class="col-sm-6 col-lg-4">
+                        item.tags.forEach(
+                            (item) => {
+                                tags_string += `<a href="#"> ${tags[item]} </a> `
+                            }
+                        );
+
+                        let email = item.email !== null ? "mailto: " + item.email : "javascript: alert('不公开邮箱')";
+
+                        document.getElementById('cards').insertAdjacentHTML('beforeend', `<div class="col-sm-6 col-lg-4">
                                     <div class="card">
                                         <div class="card-header border-0 pb-0">
                                             <div class="d-flex align-items-center justify-content-between">
@@ -169,34 +145,32 @@
                                                     </div>
                                                     <div>
                                                         <div class="nav nav-divider">
-                                                            <h6 class="nav-item card-title mb-0"><a href="#"> ${1+1} </a></h6>
+                                                            <h6 class="nav-item card-title mb-0"><a href="#"> ${item.username} </a></h6>
                                                         </div>
-                                                        <span class="card-title small text-body">2024-07-27</span>
+                                                        <span class="card-title small text-body">${date}</span>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <a href="javascript:alert('不公开邮箱')" class="text-secondary btn btn-secondary-soft-hover py-1 px-2">
+                                                    <a href="${email}" class="text-secondary btn btn-secondary-soft-hover py-1 px-2">
                                                         <i class="fa-solid fa-reply"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <p><a href="#"> #西海岸中学# </a> <a href="#"> #西中# </a> <br> 示例文段</p>
+                                            <p>
+                                                ${tags_string}
+                                                <br>
+                                                ${item.text}
+                                                </p>
                                             <div class="d-grid mt-3">
-                                                <a class="btn btn-sm btn-primary-soft" href="#">查看</a>
+                                                <a class="btn btn-sm btn-primary-soft" href="${item.href}">查看</a>
                                             </div>
                                         </div>
                                     </div>
-                                </div>`, 'text/html')
-            }
-
-            window.onload = function () {
-                document.getElementById('notify_text').innerText = notify.text;
-                document.getElementById('notify_date').innerText = notify.date;
-                document.getElementById('notify_href').setAttribute('href', notify.href);
-
-                cards_data.forEach(handler)
+                                </div>`, 'text/html');
+                    }
+                )
             }
         </script>
     
